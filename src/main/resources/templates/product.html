@@ -1,0 +1,186 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Index</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <style>
+
+        #box {
+            width: 40%;
+        }
+
+        #rattingButton {
+            background-color: white;
+            border: none;
+            position: relative;
+        }
+
+        .txt-center {
+            text-align: center;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        .clear {
+            float: none;
+            clear: both;
+        }
+
+        .rating {
+            font-size: 40px;
+            width: 250px;
+            unicode-bidi: bidi-override;
+            direction: rtl;
+            text-align: center;
+            position: relative;
+        }
+
+        .rating > label {
+            float: right;
+            display: inline;
+            padding: 0;
+            margin: 0;
+            position: relative;
+            width: 1.1em;
+            cursor: pointer;
+            color: #000;
+        }
+
+        .rating > label:hover,
+        .rating > label:hover ~ label,
+        .rating > input.radio-btn:checked ~ label {
+            color: transparent;
+        }
+
+        .rating > label:hover:before,
+        .rating > label:hover ~ label:before,
+        .rating > input.radio-btn:checked ~ label:before,
+        .rating > input.radio-btn:checked ~ label:before {
+            content: "\2605";
+            position: absolute;
+            left: 0;
+            color: #FFD700;
+        }
+
+    </style>
+</head>
+<a href="/index">Home</a>
+<body>
+
+<h1 th:text="${product.name}"></h1>
+<table>
+    <thead>
+    <p>Product details:</p>
+    </thead>
+    <tbody>
+
+    <tr th:if="${product == null}">
+        <td colspan="2"> No such product in the database</td>
+    </tr>
+    <tr>
+        <td><span th:text="'Price: '"> </span></td>
+        <td><span th:text="${product.price}"> </span></td>
+    </tr>
+    <tr>
+        <td><span th:text="'Category: '"> </span></td>
+        <td>
+            <div th:text="${product.category}"></div>
+        </td>
+    </tr>
+    <tr>
+        <td><span th:text="'Description: '"> </span></td>
+        <td>
+            <div id="box" th:text="${product.description}"></div>
+        </td>
+    </tr>
+
+    <tr>
+        <td><span th:text="'Quantity: '"> </span></td>
+        <td><span th:text="${product.quantity}"> </span></td>
+    </tr>
+    <tr>
+        <td><span th:text="'Shipping: '"> </span></td>
+        <td><span th:text="${product.shippingDays}"> </span></td>
+    </tr>
+    <tr>
+        <td><span th:text="'Rating: '"> </span></td>
+        <td><span th:text="${product.rating}"> </span></td>
+    </tr>
+
+    </tbody>
+</table>
+
+<table th:if="${bookProduct != null}">
+    <thead>
+    <td colspan="2">Additional info</td>
+    </thead>
+    <tbody>
+    <tr>
+        <td><span th:text="'Author: '"> </span></td>
+        <td><span th:text="${bookProduct.author}"> </span></td>
+    </tr>
+    <tr>
+        <td><span th:text="'Publisher: '"> </span></td>
+        <td><span th:text="${bookProduct.publisher}"> </span></td>
+    </tr>
+    <tr>
+        <td><span th:text="'Pages: '"> </span></td>
+        <td><span th:text="${bookProduct.pages}"> </span></td>
+    </tr>
+
+    </tbody>
+</table>
+<div th:if="${product.category} == 'Book'">
+    <form action="#" th:object="${product}" th:action="@{/products/{id}/book(id=${product.productID})}" method="post">
+
+        <input type="hidden" th:value="${product.name}" th:field="*{name}"/>
+        <input type="hidden" th:value="${product.productID}" th:field="*{productID}"/>
+        <input type="hidden" th:value="${product.price}" th:field="*{price}"/>
+        <input type="hidden" th:value="${product.category}" th:field="*{category}"/>
+        <input type="hidden" th:value="${product.description}" th:field="*{description}"/>
+        <input type="hidden" th:value="${product.shippingDays}" th:field="*{shippingDays}"/>
+        <input type="hidden" th:value="${product.quantity}" th:field="*{quantity}"/>
+        <input type="hidden" th:value="${product.rating}" th:field="*{rating}"/>
+
+        <button th:if="${bookProduct == null}" type="submit">Additional Info</button>
+    </form>
+</div>
+<form action="#" th:action="@{/addInBasket}" method="post">
+    <label>Quantity:</label>
+    <input type="number" name="quantity" min="1" max="100" value="1">
+    <input type="hidden" th:value="${product.productID}" name="productId"/>
+    <input type="hidden" th:value="${product.name}" name="name"/>
+    <button type="submit">Add to basket</button>
+</form>
+
+<div th:if="${logged}!=null"><h2>Rate the product:</h2>
+    <div class="txt-center">
+        <form action="#" th:action="@{/products/{id}(id=${product.productID})}" method="post">
+            <button id="rattingButton" type="submit">
+                <div class="rating" type="submit">
+                    <input id="star5" name="star" type="radio" value="5" class="radio-btn hide"/>
+                    <label for="star5">☆</label>
+                    <input id="star4" name="star" type="radio" value="4" class="radio-btn hide"/>
+                    <label for="star4">☆</label>
+                    <input id="star3" name="star" type="radio" value="3" class="radio-btn hide"/>
+                    <label for="star3">☆</label>
+                    <input id="star2" name="star" type="radio" value="2" class="radio-btn hide"/>
+                    <label for="star2">☆</label>
+                    <input id="star1" name="star" type="radio" value="1" class="radio-btn hide"/>
+                    <label for="star1">☆</label>
+                    <div class="clear"></div>
+                </div>
+            </button>
+            <p th:text="${product.rating}"></p>
+        </form>
+    </div>
+
+
+</div>
+
+
+</body>
+</html>

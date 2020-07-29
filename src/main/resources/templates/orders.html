@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Index</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+
+<body>
+<a href="/account">Back</a>
+<a href="/index">Home</a>
+
+<h2>Order history</h2>
+<table>
+    <tbody>
+    <tr th:each="order : ${orders}">
+        <td><span th:text="${order.idCode}"> Code </span></td>
+        <td><span th:text="${order.price}"> Price </span></td>
+        <td><span th:text="${order.orderDate}"> Placed date</span></td>
+        <td><span th:text="${order.shippingDate}"> Shipping date</span></td>
+        <td><span th:text="${order.status}"> Status </span></td>
+    </tr>
+    </tbody>
+</table>
+
+
+</div>
+</body>
+</html>

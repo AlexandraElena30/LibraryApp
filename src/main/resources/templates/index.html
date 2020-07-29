@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Index</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style>
+
+        .parent {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+
+        .prd:link, .prd:visited {
+            background-color: darkgrey;
+            color: black;
+
+            /*padding: 14px 25px;
+display: inline-block;
+             */
+            text-align: center;
+            text-decoration: none;
+
+
+            width: 25%;
+            height: 150px;
+        }
+
+        .prd:hover, a:active {
+            background-color: red;
+        }
+    </style>
+</head>
+
+<body>
+<div th:switch="${logged}">
+    <div th:case="'You are logged'">
+        <a href="/account">Account</a>
+        <a href="/logout1">Logout</a>
+        <a href="/myBasket">Basket</a>
+    </div>
+    <div th:case="*">
+        <a href="/register">Register</a>
+        <a href="/login">Login</a>
+
+    </div>
+</div>
+
+<h1 th:text="${order}"></h1>
+
+
+<a th:if="${admin == true}" href="/admin">Administration</a>
+
+<form action="#" th:action="@{/filter}" method="GET">
+    <input type="text" name="searchString" placeholder="Enter product name"/><br/>
+    <button type="submit">Search</button>
+</form>
+
+
+<form action="#" th:action="@{/category}" method="GET">
+    <select name="categ">
+        <option value="All">All Categories</option>
+        <option value="Book">Books</option>
+        <option value="Cosmetics">Cosmetics</option>
+        <option value="Office supplies">Office Supplies</option>
+    </select><br/>
+    <button type="submit">Filter</button>
+</form>
+
+
+<h2>Most popular products:</h2>
+
+
+<div class="parent">
+    <a class="prd" th:each="product : ${prods}" th:href="@{'/products/' + ${product.productID}}">
+        <img th:src="@{'images/'+${product.productID}+'.PNG'}" alt="No picture" width="100px" height="100px"/>
+
+        <div><span th:text="${product.name}"> Title </span></div>
+        <div><span th:text="${product.price}"> Price </span></div>
+
+    </a>
+</div>
+</body>
+</html>

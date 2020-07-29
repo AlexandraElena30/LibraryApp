@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Index</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+
+<body>
+<div th:if="${logged != null}">
+
+    <a href="/index">Home</a>
+    <p th:text="${message}"></p>
+
+    <h5 th:text="'Your current balance is:' + ${balance}"></h5>
+    <form action="#" th:action="@{/account}" method="post">
+        <label>Card Number</label>
+        <input type="text" name="cardNr"/><br/>
+
+        <label>CVC</label>
+        <input type="password" name="CVC"/><br/>
+
+        <label>Amount(LEI)</label>
+        <input type="number" name="amount" min="0.01" placeholder="0.00" step="0.01"/><br/>
+
+        <button type="submit">Charge</button>
+    </form>
+
+    <a href="/account/orders">My orders</a>
+
+</div>
+</body>
+</html>
